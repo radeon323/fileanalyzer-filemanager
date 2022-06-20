@@ -101,19 +101,11 @@ public class FileManager {
 
     private static void deleteFileAndMessage(File file) {
         String name = file.getName();
-        if (file.isFile()) {
-            if (file.delete()) {
-                System.out.println("File " + name + " was successfully removed!");
-            } else {
-                System.out.println("Failed to remove file " + name + " .");
-            }
+        if (file.isFile() && !file.delete()) {
+            System.out.println("Failed to remove file " + name + " .");
         }
-        if (file.isDirectory()) {
-            if (file.delete()) {
-                System.out.println("Directory [" + name.toUpperCase(Locale.ROOT) + "] was successfully removed!");
-            } else {
-                System.out.println("Failed to remove directory [" + name.toUpperCase(Locale.ROOT) + "] .");
-            }
+        if (file.isDirectory() && !file.delete()) {
+            System.out.println("Failed to remove directory [" + name.toUpperCase(Locale.ROOT) + "] .");
         }
     }
 
