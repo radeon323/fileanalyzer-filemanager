@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FileAnalyzerTest {
     FileAnalyzer fileAnalyzer = new FileAnalyzer();
-    String path = "src/main/resources/story.txt";
+    String path = "src/test/resources/story.txt";
 
     @Test
     @DisplayName("Test FindWordEntryCount method")

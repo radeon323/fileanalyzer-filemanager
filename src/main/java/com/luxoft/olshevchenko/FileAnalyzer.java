@@ -11,8 +11,9 @@ public class FileAnalyzer {
     public static void main(String[] args) {
         String word = args[0];
         String path = args[1];
-        int wordEntryCount = new FileAnalyzer().findWordEntryCount(path, word);
-        int sentencesWithGivenWordCount = new FileAnalyzer().findSentencesWithGivenWord(path, word);
+        FileAnalyzer fileAnalyzer = new FileAnalyzer();
+        int wordEntryCount = fileAnalyzer.findWordEntryCount(path, word);
+        int sentencesWithGivenWordCount = fileAnalyzer.findSentencesWithGivenWord(path, word);
         System.out.println();
         System.out.println("\u001B[34m" + "Word '" + word + "' in this text occurs " + wordEntryCount + " times." + "\u001B[0m");
         System.out.println("\u001B[33m" + "The number of sentences with word '" + word + "' is " + sentencesWithGivenWordCount + "." + "\u001B[0m");

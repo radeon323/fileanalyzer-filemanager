@@ -64,14 +64,14 @@ public class FileManager {
     private static void fileCopy(File from, File to) {
         try (FileInputStream fileInputStream = new FileInputStream(from);
              FileOutputStream fileOutputStream = new FileOutputStream(to)) {
-            int bufSize;
-            byte[] buf = new byte[1024];
-            while ((bufSize = fileInputStream.read(buf)) > 0) {
-                fileOutputStream.write(buf, 0, bufSize);
+            int count;
+            byte[] buf = new byte[8192];
+            while ((count = fileInputStream.read(buf)) > 0) {
+                fileOutputStream.write(buf, 0, count);
             }
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new RuntimeException("Can't copy file content from " + from + " to " + to + ".");
         }
     }
 

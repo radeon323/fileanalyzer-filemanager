@@ -7,46 +7,47 @@ import java.io.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FileManagerTest {
-    private final String CopyFrom = "src/main/resources/CopyFrom";
-    private final String CopyTo = "src/main/resources/CopyTo";
+    private static final String COPY_FROM = "src/test/resources/CopyFrom";
+    private static final String COPY_TO = "src/test/resources/CopyTo";
 
     @SneakyThrows
     @BeforeEach
     void before() {
-        createDirectoryAndMessage(CopyFrom);
-        createDirectoryAndMessage(CopyTo);
-        createDirectoryAndMessage(CopyFrom + "/1");
-        createDirectoryAndMessage(CopyFrom + "/1/2");
-        createDirectoryAndMessage(CopyFrom + "/1/2/3");
-        createDirectoryAndMessage(CopyFrom + "/4");
-        createDirectoryAndMessage(CopyFrom + "/4/5");
-        writeTxtFile(CopyFrom + "/1", "1");
-        writeTxtFile(CopyFrom + "/1/2", "2");
-        writeTxtFile(CopyFrom + "/1/2/3", "3");
-        writeTxtFile(CopyFrom + "/4", "4");
-        writeTxtFile(CopyFrom, "5");
-        writeTxtFile(CopyFrom, "6");
-        writeTxtFile(CopyFrom, "7");
-        writeTxtFile(CopyFrom, "8");
+        createDirectoryAndMessage(COPY_FROM);
+        createDirectoryAndMessage(COPY_TO);
+        createDirectoryAndMessage(COPY_FROM + "/1");
+        createDirectoryAndMessage(COPY_FROM + "/1/2");
+        createDirectoryAndMessage(COPY_FROM + "/1/2/3");
+        createDirectoryAndMessage(COPY_FROM + "/4");
+        createDirectoryAndMessage(COPY_FROM + "/4/5");
+        writeTxtFile(COPY_FROM + "/1", "1");
+        writeTxtFile(COPY_FROM + "/1/2", "2");
+        writeTxtFile(COPY_FROM + "/1/2/3", "3");
+        writeTxtFile(COPY_FROM + "/4", "4");
+        writeTxtFile(COPY_FROM, "5");
+        writeTxtFile(COPY_FROM, "6");
+        writeTxtFile(COPY_FROM, "7");
+        writeTxtFile(COPY_FROM, "8");
     }
 
     @AfterEach
     void after() {
-        FileManager.deleteAll(CopyFrom);
-        FileManager.deleteAll(CopyTo);
-        assertEquals(0, FileManager.countFiles(CopyTo));
-        assertEquals(0, FileManager.countDirs(CopyTo));
-        new File(CopyFrom).delete();
-        new File(CopyTo).delete();
+        FileManager.deleteAll(COPY_FROM);
+        FileManager.deleteAll(COPY_TO);
+        assertEquals(0, FileManager.countFiles(COPY_TO));
+        assertEquals(0, FileManager.countDirs(COPY_TO));
+        new File(COPY_FROM).delete();
+        new File(COPY_TO).delete();
     }
 
-    @SneakyThrows
     private static void writeTxtFile(String pathToFile, String content) {
         File file = new File(pathToFile + "/" + content + ".txt");
         createFileAndMessage(file);
-        FileWriter fileWriter = new FileWriter(file);
-        fileWriter.write(content);
-        fileWriter.close();
+        try (FileWriter fileWriter = new FileWriter(file)) {
+            fileWriter.write(content);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write file " + file + " .");
+        }
     }
 
     @SneakyThrows
@@ -66,55 +67,55 @@ class FileManagerTest {
     @Test
     @DisplayName("Test CountFiles method")
     void testCountFiles() {
-        assertEquals(8, FileManager.countFiles(CopyFrom));
-        assertEquals(0, FileManager.countFiles(CopyTo));
+        assertEquals(8, FileManager.countFiles(COPY_FROM));
+        assertEquals(0, FileManager.countFiles(COPY_TO));
     }
 
     @Test
     @DisplayName("Test CountFiles method if path specified is invalid")
     void testCountFilesIfInvalidPath() {
-        Assertions.assertThrows(RuntimeException.class, () -> FileManager.countFiles(CopyFrom + "-"));
+        Assertions.assertThrows(RuntimeException.class, () -> FileManager.countFiles(COPY_FROM + "-"));
     }
 
     @Test
     @DisplayName("Test CountDirs method")
     void testCountDirs() {
-        assertEquals(5, FileManager.countDirs(CopyFrom));
-        assertEquals(0, FileManager.countDirs(CopyTo));
+        assertEquals(5, FileManager.countDirs(COPY_FROM));
+        assertEquals(0, FileManager.countDirs(COPY_TO));
     }
 
     @Test
     @DisplayName("Test CountDirs method if path specified is invalid")
     void testCountDirsIfInvalidPath() {
-        Assertions.assertThrows(RuntimeException.class, () -> FileManager.countDirs(CopyFrom + "-"));
+        Assertions.assertThrows(RuntimeException.class, () -> FileManager.countDirs(COPY_FROM + "-"));
     }
 
     @Test
     @DisplayName("Test Copy method")
     void testCopy() {
-        FileManager.copy(CopyFrom, CopyTo);
-        assertEquals(8, FileManager.countFiles(CopyTo));
-        assertEquals(5, FileManager.countDirs(CopyTo));
+        FileManager.copy(COPY_FROM, COPY_TO);
+        assertEquals(8, FileManager.countFiles(COPY_TO));
+        assertEquals(5, FileManager.countDirs(COPY_TO));
     }
 
     @Test
     @DisplayName("Test Copy method if path specified is invalid")
     void testCopyIfInvalidPath() {
-        Assertions.assertThrows(RuntimeException.class, () -> FileManager.copy(CopyFrom + "-", CopyTo));
+        Assertions.assertThrows(RuntimeException.class, () -> FileManager.copy(COPY_FROM + "-", COPY_TO));
     }
 
     @Test
     @DisplayName("Test Move method")
     void testMove() {
-        FileManager.move(CopyFrom, CopyTo);
-        assertEquals(8, FileManager.countFiles(CopyTo));
-        assertEquals(5, FileManager.countDirs(CopyTo));
+        FileManager.move(COPY_FROM, COPY_TO);
+        assertEquals(8, FileManager.countFiles(COPY_TO));
+        assertEquals(5, FileManager.countDirs(COPY_TO));
     }
 
     @Test
     @DisplayName("Test Move method if path specified is invalid")
     void testMoveIfInvalidPath() {
-        Assertions.assertThrows(RuntimeException.class, () -> FileManager.move(CopyFrom + "-", CopyTo));
+        Assertions.assertThrows(RuntimeException.class, () -> FileManager.move(COPY_FROM + "-", COPY_TO));
     }
 
 
